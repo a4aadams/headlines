@@ -71,7 +71,10 @@ def get_news(query):
     return feed['entries']
 
 def get_weather(query):
-    query = urllib.parse.quote(query)
+    try:
+        query = urllib.parse.quote(query)
+    except AttributeError:
+        query = urlib.quote(query)
     url = WEATHER_URL.format(query)
     data = urllib.request.urlopen(url).read()
     parsed = json.loads(data)
