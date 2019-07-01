@@ -74,7 +74,7 @@ def get_weather(query):
     try:
         query = urllib.parse.quote(query)
     except AttributeError:
-        query = urlib.quote(query)
+        query = urllib.quote(query)
     url = WEATHER_URL.format(query)
     data = urllib.request.urlopen(url).read()
     parsed = json.loads(data)
