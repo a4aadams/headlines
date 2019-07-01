@@ -1,6 +1,10 @@
 import feedparser
 import json
 import urllib
+try:
+    import urllib2
+except ModuleNotFoundError:
+    pass
 import datetime
 from flask import Flask
 from flask import render_template
@@ -76,7 +80,10 @@ def get_weather(query):
     except AttributeError:
         query = urllib.quote(query)
     url = WEATHER_URL.format(query)
-    data = urllib.request.urlopen(url).read()
+    try:
+        data = urllib.request.urlopen(url).read()
+    except AttributeError:
+        data = urllib2.urlopen(url).read()
     parsed = json.loads(data)
     weather = None
     if parsed.get("weather"):
@@ -87,7 +94,10 @@ def get_weather(query):
     return weather
 
 def get_rate(frm, to):
-    all_currency = urllib.request.urlopen(CURRENCY_URL).read()
+    try:
+        all_currency = urllib.request.urlopen(CURRENCY_URL).read()
+    except AttributeError:
+        all_currency = urllib2.urlopen(CURRENCY_URL).read()
     parsed = json.loads(all_currency).get('rates')
     frm_rate = parsed.get(frm.upper())
     to_rate = parsed.get(to.upper())
